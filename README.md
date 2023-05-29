@@ -25,8 +25,9 @@ This is a backend application for a contact manager built using Node.js, Express
 3. Set up environment variables:
 - Create a .env file in the root directory.
 - Specify the following environment variables in the .env file:
-    - PORT=5001
-    - HOST='localhost'
+    - PORT
+    - HOST
+    - CONNECTION_STRING
 4. start the server:
     - npm run start
 The server will be running at http://localhost:5001
