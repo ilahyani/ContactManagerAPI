@@ -1,11 +1,13 @@
 const asyncHandler = require("express-async-handler")
+const contacts = require("../models/contactModel")
 
 //@desc GET ALL CONTACTS
 //@route GET /api/contacts
 //@access public
 
 const getContacts = asyncHandler(async (req, res) => {
-    res.json({ msg: "GET CONTACTS" })
+    const contactsTable = await contacts.find();
+    res.json(contactsTable)
 })
 
 //@desc GET CONTACT
@@ -13,7 +15,17 @@ const getContacts = asyncHandler(async (req, res) => {
 //@access public
 
 const getContact = asyncHandler(async (req, res) => {
-    res.json({ msg: `GET CONTACT ${req.params.id}` })
+    try {
+        const contact = await contacts.findById(req.params.id)
+        if (!contact) {
+            res.status(404)
+            throw new Error("Contact does not exist")
+        }
+        res.json(contact)
+    } catch (e) {
+        res.status(404)
+        throw new Error("Contact does not exist")
+    }
 })
 
 //@desc CREATE CONTACT
@@ -21,13 +33,13 @@ const getContact = asyncHandler(async (req, res) => {
 //@access public
 
 const createContact = asyncHandler(async (req, res) => {
-    console.log("request", req.body)
     const { name, email, phone } = req.body
     if (!name || !email || !phone) {
         res.status(400)
         throw new Error("All fields are mandatory")
     }
-    res.json({ msg: "CREATE CONTACT" })
+    const newContact = await contacts.create(req.body)
+    res.json(newContact)
 })
 
 //@desc EDIT CONTACT
@@ -35,7 +47,22 @@ const createContact = asyncHandler(async (req, res) => {
 //@access public
 
 const editContact = asyncHandler(async (req, res) => {
-    res.json({ msg: `EDIT CONTACT ${req.params.id}` })
+    try {
+        const contact = await contacts.findById(req.params.id)
+        if (!contact) {
+            res.status(404)
+            throw new Error("Contact does not exist")
+        }
+        const updatedContact = await contacts.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        )
+        res.json(updatedContact)
+    } catch (e) {
+        res.status(404)
+        throw new Error("Contact does not exist")
+    }
 })
 
 //@desc DELETE CONTACT
@@ -43,7 +70,18 @@ const editContact = asyncHandler(async (req, res) => {
 //@access public
 
 const deleteContact = asyncHandler(async (req, res) => {
-    res.json({ msg: `DELETE CONTACT ${req.params.id}` })
+    try {
+        const contact = await contacts.findById(req.params.id)
+        if (!contact) {
+            res.status(404)
+            throw new Error("Contact does not exist")
+        }
+        const updatedContact = await contacts.findByIdAndDelete(req.params.id)
+        res.json("Contact Deleted")
+    } catch (e) {
+        res.status(404)
+        throw new Error("Contact does not exist")
+    }
 })
 
 module.exports = { getContacts, getContact, createContact, editContact, deleteContact }
