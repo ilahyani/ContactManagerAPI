@@ -28,6 +28,7 @@ This is a backend application for a contact manager built using Node.js, Express
     - PORT
     - HOST
     - CONNECTION_STRING
+    - ACCESS_TOKEN_SECRET
 4. start the server:
     - npm run start
 The server will be running at http://localhost:5001
