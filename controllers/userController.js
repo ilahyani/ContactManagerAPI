@@ -54,7 +54,7 @@ const logUser = asyncHandler(async (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "1m" }
+            { expiresIn: "10m" }
         )
         res.json({ accessToken })
     }
@@ -66,10 +66,10 @@ const logUser = asyncHandler(async (req, res) => {
 
 //@desc GET USER
 //@route GET /api/users
-//@access public
+//@access private
 
 const getUser = asyncHandler(async (req, res) => {
-    res.json("GET USER")
+    res.json(req.user)
 })
 
 module.exports = { getUser, logUser, registerUser }
